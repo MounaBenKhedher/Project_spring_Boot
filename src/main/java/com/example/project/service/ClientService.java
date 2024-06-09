@@ -50,6 +50,31 @@ public class ClientService {
         map.put("deleted",Boolean.TRUE);
         return map;
     }
+    public Client updateClient(long id, Client clientDetails) {
+        return clienRepository.findById(id).map(client -> {
+            client.setCodeRelation(clientDetails.getCodeRelation());
+            client.setIdNat(clientDetails.getIdNat());
+            client.setCodeRelationFlexcube(clientDetails.getCodeRelationFlexcube());
+            client.setIdentifiantProspect(clientDetails.getIdentifiantProspect());
+            client.setDenomination(clientDetails.getDenomination());
+            client.setProfession(clientDetails.getProfession());
+            client.setAdresse(clientDetails.getAdresse());
+            client.setAgence(clientDetails.getAgence());
+            client.setVille(clientDetails.getVille());
+            client.setRegion(clientDetails.getRegion());
+            client.setDateNaissance(clientDetails.getDateNaissance());
+            client.setDateDebutRelation(clientDetails.getDateDebutRelation());
+            client.setAutre(clientDetails.getAutre());
+            return clienRepository.save(client);
+        }).orElseThrow(() -> new RuntimeException("Client not found with id " + id));
+    }
+
+    public Optional<Client> findClientByCodeRelation(long codeRelation) {
+        return clienRepository.findByCodeRelation(codeRelation);
+    }
+    public Optional<Client> findClientById(long id) {
+        return clienRepository.findById(id);
+    }
     @Transactional
     public Set<Client> uploadClients(MultipartFile file) throws IOException {
         Set<ClientSni> clients = parseCsv(file);

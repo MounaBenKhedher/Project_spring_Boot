@@ -15,6 +15,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 
 @RestController
@@ -63,5 +64,26 @@ public class ClientController {
         } catch (MissingEntity e) {
             return ResponseEntity.notFound().build();
         }
+    }
+    @PutMapping("updateClient/{id}")
+    public ResponseEntity<Client> updateClient(@PathVariable long id, @RequestBody Client clientDetails) {
+        try {
+            Client updatedClient = clientService.updateClient(id, clientDetails);
+            return ResponseEntity.ok(updatedClient);
+        } catch (RuntimeException e) {
+            return ResponseEntity.notFound().build();
+        }
+    }
+    @GetMapping("/clients/search")
+    public ResponseEntity<Client> getClientByCodeRelation(@RequestParam long codeRelation) {
+        Optional<Client> client = clientService.findClientByCodeRelation(codeRelation);
+        return client.map(ResponseEntity::ok)
+                .orElseGet(() -> ResponseEntity.notFound().build());
+    }
+    @GetMapping("/client/search")
+    public ResponseEntity<Client> getClientByCodeRelationAndId(@RequestParam long id) {
+        Optional<Client> client = clientService.findClientById( id);
+        return client.map(ResponseEntity::ok)
+                .orElseGet(() -> ResponseEntity.notFound().build());
     }
 }
