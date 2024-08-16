@@ -28,8 +28,12 @@ public class ModeleForm {
     private double maxCaValue;
 
     private boolean withFinancialData;
+private  int Anne ;
 
 
+    public ModeleForm(int anne) {
+
+    }
 
     public ModeleForm(Model modele){
         this.id=modele.getId();
@@ -44,7 +48,8 @@ public class ModeleForm {
         this.disabled= modele.isDisabled();
         this.minCaValue =modele.getMinCaValue();
         this.maxCaValue = modele.getMaxCaValue();
-
+        this.Anne = modele.getAnnee() ;
+        this.withFinancialData= modele.isWithFinancialData();
 
 
     }

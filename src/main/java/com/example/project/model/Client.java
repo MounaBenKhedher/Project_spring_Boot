@@ -6,6 +6,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -39,8 +40,10 @@ public class Client {
     @Lob
     private String autre;
 
-
-
+/*
+    @ManyToMany(mappedBy = "clients")
+    private Set<Notation> notations;
+*/
 
 
 }

@@ -39,7 +39,7 @@ public class ModuleController {
     public Map<String,Boolean> deleteModule(@PathVariable String codmodule){
         return modulService.deleteModule(codmodule);
     }
-    @GetMapping("/getByCodModule/{codmodule}")
+    @GetMapping("/Module/{cdModul}")
     public Moduldto getModul(@PathVariable String codmodule){
         Modul modul = modulService.findByCodmodule(codmodule);
         return Moduldto.of(modul);

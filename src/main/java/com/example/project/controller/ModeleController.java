@@ -4,6 +4,7 @@ import com.example.project.dto.ModelDto;
 import com.example.project.exception.MissingEntity;
 import com.example.project.form.ModeleForm;
 import com.example.project.model.Model;
+import com.example.project.repository.ModelRepository;
 import com.example.project.service.ModeleService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,7 +12,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 
 @RestController
@@ -22,6 +25,8 @@ public class ModeleController {
 
         @Autowired
         ModeleService modeleService;
+        @Autowired
+    ModelRepository modelRepository ;
 
         @PostMapping("/addmodels")
         public ModelDto addModele(@RequestBody ModeleForm form) throws MissingEntity {
@@ -96,5 +101,26 @@ public class ModeleController {
                 return ResponseEntity.notFound().build();
             }
         }
+
+    @GetMapping(value = "/searchByNameAndAnnee")
+    public List<ModelDto> advancedSearch(@RequestParam(name = "name") String name,
+                                          @RequestParam(name = "annee", required = true) int annee) throws MissingEntity {
+        List<Model> modeles = modeleService.searchByNameAndAnnee(name, annee);
+        return ModelDto.of(modeles);
+
+    }
+    @PutMapping("/{id}/ModeleUsed")
+    public ResponseEntity<Model> toggleModeleUsed(@PathVariable Long id) {
+        Optional<Model> optionalModele = modelRepository.findById(id);
+        if (optionalModele.isPresent()) {
+            Model modele = optionalModele.get();
+            modele.setUsed(!modele.isUsed());
+            modele.setLastUsedDate(new Date());
+            Model updatedModele = modelRepository.save(modele);
+            return ResponseEntity.ok(updatedModele);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
 
     }

@@ -5,6 +5,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Getter
@@ -25,7 +26,7 @@ public class Model {
     @Temporal(TemporalType.DATE)
     private Date dateUpdate;
 
-    private boolean used;
+    private boolean used ;
     private boolean updatebale;
 
     @Temporal(TemporalType.DATE)
@@ -40,7 +41,11 @@ public class Model {
     private double maxCaValue;
 
     private boolean withFinancialData;
+    private int annee;
 
+
+    @OneToMany(mappedBy = "modele", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    List<Variable> variables;
 
     @PrePersist
     public void prePersist() {
@@ -65,6 +70,5 @@ public class Model {
         dateUpdate = new Date();
     }
     // Constructors
-    public Model() {}
 
    }
